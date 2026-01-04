@@ -1,0 +1,210 @@
+# Task Manager API
+
+Projeto desenvolvido em **Java com Spring Boot**, com foco em **boas práticas de arquitetura**, **organização em camadas** e **uso de padrões de projeto**, ideal para portfólio profissional (GitHub / LinkedIn).
+
+---
+
+## 🎯 Objetivo do Projeto
+
+Construir uma **API REST** para gerenciamento de tarefas, aplicando conceitos usados no mercado, como:
+
+* Arquitetura em camadas
+* Separação de responsabilidades
+* Padrões de Projeto (Factory, Strategy)
+* Boas práticas com Spring Boot
+
+O projeto foi desenvolvido de forma **incremental**, começando por endpoints simples de validação da API.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+* Java 21+
+* Spring Boot
+* Maven
+* Spring Web
+* Spring Data JPA
+*  H2 
+*(futuro) PostgreSQL
+
+---
+
+## 📦 Estrutura de Pacotes
+
+```
+com.jean.taskmanager
+ ├── controller
+ ├── service
+ ├── repository
+ ├── model
+ ├── dto
+ ├── factory
+ ├── strategy
+ ├── exception
+ └── config
+```
+
+### 📁 controller
+
+Responsável por receber as **requisições HTTP** e devolver as **respostas HTTP**.
+
+* Define URLs e métodos HTTP
+* Não contém regra de negócio
+
+Exemplo:
+
+```java
+@RestController
+@RequestMapping("/tarefas")
+public class TarefaController { }
+```
+
+---
+
+### 📁 service
+
+Camada onde ficam as **regras de negócio** da aplicação.
+
+* Valida dados
+* Coordena chamadas ao repository
+* Aplica regras do domínio
+
+---
+
+### 📁 repository
+
+Responsável pelo **acesso a dados** (banco de dados).
+
+* Persistência
+* Consultas
+* Atualizações
+
+---
+
+### 📁 model
+
+Representa o **domínio do sistema**.
+
+* Entidades
+* Enums
+
+Exemplo:
+
+```java
+public class Tarefa {
+    private String titulo;
+}
+```
+
+---
+
+### 📁 dto (Data Transfer Object)
+
+Utilizado para **transportar dados** entre camadas.
+
+* Evita expor entidades diretamente
+* Permite formatos diferentes para entrada e saída
+
+---
+
+### 📁 factory
+
+Responsável por **centralizar a criação de objetos** complexos.
+
+* Evita lógica de criação espalhada pelo código
+
+---
+
+### 📁 strategy
+
+Implementa o padrão **Strategy**, permitindo trocar comportamentos em tempo de execução.
+
+* Exemplo: regras diferentes baseadas na prioridade da tarefa
+
+---
+
+### 📁 exception
+
+Centraliza o tratamento de **exceções da aplicação**.
+
+* Respostas padronizadas
+* Uso de `@ControllerAdvice`
+
+---
+
+### 📁 config
+
+Configurações globais do projeto.
+
+* Beans
+* Swagger// não estava disponivel na versão do spring 4.0.1 durante o desenvolvimento 
+* CORS
+* Segurança
+
+---
+
+## 🔄 Fluxo da Aplicação
+
+```
+Requisição HTTP
+   ↓
+Controller
+   ↓
+Service
+   ↓
+Factory / Strategy
+   ↓
+Repository
+   ↓
+Banco de Dados
+```
+
+---
+
+## ▶️ Como Executar o Projeto
+
+### Pré-requisitos
+
+* Java instalado
+* Maven ou Maven Wrapper
+
+### Executar a aplicação
+
+No diretório do projeto:
+
+```bash
+./mvnw.cmd spring-boot:run
+```
+
+Ou, se tiver Maven instalado:
+
+```bash
+mvn spring-boot:run
+```
+
+---
+
+## ✅ Teste Inicial da API
+
+Endpoint de verificação:
+
+```
+GET http://localhost:8080/tarefas
+```
+
+
+
+
+
+
+---
+
+## 💼 Sobre o Projeto
+
+Este projeto foi criado com foco em **aprendizado prático** e **qualidade de código**, seguindo padrões usados em sistemas reais.
+
+Ideal para demonstrar conhecimentos em **Java, Spring Boot e Arquitetura de Software**.
+
+---
+
+📌 *Projeto em evolução — melhorias contínuas serão adicionadas.*
