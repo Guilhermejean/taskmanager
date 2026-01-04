@@ -1,37 +1,54 @@
-# Task Manager API
+📋 Task Manager API
 
-Projeto desenvolvido em **Java com Spring Boot**, com foco em **boas práticas de arquitetura**, **organização em camadas** e **uso de padrões de projeto**, ideal para portfólio profissional (GitHub / LinkedIn).
+API REST desenvolvida em Java com Spring Boot, focada em boas práticas de arquitetura, organização em camadas, padrões de projeto e persistência com JPA.
 
----
+Projeto ideal para portfólio profissional (GitHub / LinkedIn).
 
-## 🎯 Objetivo do Projeto
+🎯 Objetivo do Projeto
 
-Construir uma **API REST** para gerenciamento de tarefas, aplicando conceitos usados no mercado, como:
+Construir uma API REST de gerenciamento de tarefas, aplicando conceitos amplamente utilizados no mercado, como:
 
-* Arquitetura em camadas
-* Separação de responsabilidades
-* Padrões de Projeto (Factory, Strategy)
-* Boas práticas com Spring Boot
+Arquitetura em camadas
 
-O projeto foi desenvolvido de forma **incremental**, começando por endpoints simples de validação da API.
+Separação de responsabilidades
 
----
+DTOs para entrada e saída de dados
 
-## 🛠️ Tecnologias Utilizadas
+Persistência com Spring Data JPA
 
-* Java 21+
-* Spring Boot
-* Maven
-* Spring Web
-* Spring Data JPA
-*  H2 
-*(futuro) PostgreSQL
+Padrões de Projeto:
 
----
+Factory
 
-## 📦 Estrutura de Pacotes
+Strategy
 
-```
+API testável via Insomnia / Swagger UI
+
+Código limpo e organizado
+
+🛠️ Tecnologias Utilizadas
+
+Java 21+
+
+Spring Boot 3.x / 4.x
+
+Maven
+
+Spring Web
+
+Spring Data JPA
+
+Hibernate
+
+Banco de dados H2 (em memória)
+
+Swagger / OpenAPI
+
+Insomnia (testes da API)
+
+📌 (Futuro) PostgreSQL
+
+📦 Estrutura de Pacotes
 com.jean.taskmanager
  ├── controller
  ├── service
@@ -42,169 +59,229 @@ com.jean.taskmanager
  ├── strategy
  ├── exception
  └── config
-```
 
-### 📁 controller
+📁 controller
 
-Responsável por receber as **requisições HTTP** e devolver as **respostas HTTP**.
+Responsável por receber e responder às requisições HTTP.
 
-* Define URLs e métodos HTTP
-* Não contém regra de negócio
+Define endpoints REST
 
-Exemplo:
+Converte DTOs
 
-```java
+Não contém regra de negócio
+
 @RestController
 @RequestMapping("/tarefas")
 public class TarefaController { }
-```
 
----
+📁 service
 
-### 📁 service
+Camada de regra de negócio.
 
-Camada onde ficam as **regras de negócio** da aplicação.
+Criação de tarefas
 
-* Valida dados
-* Coordena chamadas ao repository
-* Aplica regras do domínio
+Edição
 
----
+Conclusão
 
-### 📁 repository
+Cancelamento
 
-Responsável pelo **acesso a dados** (banco de dados).
+Integração com Factory e Strategy
 
-* Persistência
-* Consultas
-* Atualizações
+📁 repository
 
----
+Camada de persistência usando Spring Data JPA.
 
-### 📁 model
+public interface TarefaRepository extends JpaRepository<Tarefa, Long> { }
 
-Representa o **domínio do sistema**.
+📁 model
 
-* Entidades
-* Enums
+Representa o domínio da aplicação.
+
+Entidades JPA
+
+Enums de domínio
+
+Entidade principal
+@Entity
+@Table(name = "tarefas")
+public class Tarefa {
+    private String titulo;
+    private Prioridade prioridade;
+    private StatusTarefa status;
+    private LocalDate prazo;
+}
+
+📁 dto (Data Transfer Object)
+
+Camada responsável por entrada e saída de dados da API.
+
+DTOs existentes:
+
+TarefaRequestDTO → criação
+
+TarefaUpdateDTO → edição
+
+TarefaResponseDTO → resposta da API
+
+Evita expor entidades diretamente.
+
+📁 factory
+
+Implementa o padrão Factory.
+
+Responsável por:
+
+Criar tarefas
+
+Aplicar automaticamente a Strategy correta baseada na prioridade
+
+Tarefa tarefa = factory.criar(titulo, descricao, prioridade);
+
+📁 strategy
+
+Implementa o padrão Strategy.
+
+Define regras diferentes de negócio conforme a prioridade da tarefa:
+
+ALTA
+
+MEDIA
+
+BAIXA
+
+PADRAO
 
 Exemplo:
 
-```java
-public class Tarefa {
-    private String titulo;
-}
-```
+Prazo automático
 
----
+Comportamentos diferentes por prioridade
 
-### 📁 dto (Data Transfer Object)
+📁 exception
 
-Utilizado para **transportar dados** entre camadas.
+Centraliza o tratamento de erros da aplicação.
 
-* Evita expor entidades diretamente
-* Permite formatos diferentes para entrada e saída
+Exceções customizadas
 
----
+Respostas HTTP padronizadas
 
-### 📁 factory
+Uso de @ControllerAdvice
 
-Responsável por **centralizar a criação de objetos** complexos.
+📁 config
 
-* Evita lógica de criação espalhada pelo código
+Configurações globais:
 
----
+Swagger / OpenAPI
 
-### 📁 strategy
+Beans
 
-Implementa o padrão **Strategy**, permitindo trocar comportamentos em tempo de execução.
+Configurações gerais
 
-* Exemplo: regras diferentes baseadas na prioridade da tarefa
+📌 Swagger não esteve disponível em algumas versões do Spring Boot durante o desenvolvimento, mas está previsto e configurado.
 
----
-
-### 📁 exception
-
-Centraliza o tratamento de **exceções da aplicação**.
-
-* Respostas padronizadas
-* Uso de `@ControllerAdvice`
-
----
-
-### 📁 config
-
-Configurações globais do projeto.
-
-* Beans
-* Swagger// não estava disponivel na versão do spring 4.0.1 durante o desenvolvimento 
-* CORS
-* Segurança
-
----
-
-## 🔄 Fluxo da Aplicação
-
-```
+🔄 Fluxo da Aplicação
 Requisição HTTP
    ↓
 Controller
    ↓
 Service
    ↓
-Factory / Strategy
+Factory
    ↓
-Repository
+Strategy
    ↓
-Banco de Dados
-```
+Repository (JPA)
+   ↓
+Banco de Dados (H2)
 
----
+🚀 Endpoints Disponíveis
+➕ Criar tarefa
+POST /tarefas
 
-## ▶️ Como Executar o Projeto
+{
+  "titulo": "Estudar Spring Boot",
+  "descricao": "Revisar JPA e padrões",
+  "prioridade": "ALTA"
+}
 
-### Pré-requisitos
+📄 Listar tarefas
+GET /tarefas
 
-* Java instalado
-* Maven ou Maven Wrapper
+✏️ Editar tarefa
+PUT /tarefas/{id}
 
-### Executar a aplicação
+{
+  "titulo": "Novo título",
+  "descricao": "Nova descrição",
+  "prioridade": "MEDIA"
+}
 
-No diretório do projeto:
+✅ Concluir tarefa
+PUT /tarefas/{id}/concluir
 
-```bash
+❌ Cancelar tarefa
+PUT /tarefas/{id}/cancelar
+
+▶️ Como Executar o Projeto
+Pré-requisitos
+
+Java instalado
+
+Maven ou Maven Wrapper
+
+Executar
 ./mvnw.cmd spring-boot:run
-```
 
-Ou, se tiver Maven instalado:
 
-```bash
+ou
+
 mvn spring-boot:run
-```
 
----
+🧪 Testando a API
+Insomnia
 
-## ✅ Teste Inicial da API
+Criar requisições REST
 
-Endpoint de verificação:
+Enviar JSON
 
-```
-GET http://localhost:8080/tarefas
-```
+Validar status HTTP
+
+Ver respostas
+
+Swagger UI
+http://localhost:8080/swagger-ui/index.html
+
+H2 Console
+http://localhost:8080/h2-console
 
 
+JDBC URL:
 
+jdbc:h2:mem:testdb
 
+💼 Sobre o Projeto
 
+Este projeto foi desenvolvido com foco em:
 
----
+Código limpo
 
-## 💼 Sobre o Projeto
+Arquitetura real de mercado
 
-Este projeto foi criado com foco em **aprendizado prático** e **qualidade de código**, seguindo padrões usados em sistemas reais.
+Padrões de projeto
 
-Ideal para demonstrar conhecimentos em **Java, Spring Boot e Arquitetura de Software**.
+Boas práticas com Spring Boot
 
----
+Ideal para demonstrar conhecimento em:
 
-📌 *Projeto em evolução — melhorias contínuas serão adicionadas.*
+Java
+
+Spring Boot
+
+APIs REST
+
+JPA / Hibernate
+
+Design Patterns
+
+📌 Projeto em evolução — novas funcionalidades e melhorias contínuas serão adicionadas.
