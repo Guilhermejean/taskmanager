@@ -3,6 +3,7 @@ package com.jean.taskmanager.service;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+import java.time.LocalDate;
 import com.jean.taskmanager.factory.TarefaFactory;
 import com.jean.taskmanager.model.Tarefa;
 import com.jean.taskmanager.model.Prioridade;
@@ -23,10 +24,23 @@ public class TarefaService {
         this.factory = factory;
     }
 
-    public Tarefa criarTarefa(String titulo, String descricao, Prioridade prioridade) {
-        Tarefa tarefa = factory.criar(titulo, descricao, prioridade);
+    
+    public Tarefa criarTarefa(
+        String titulo,
+        String descricao,
+        Prioridade prioridade,
+        LocalDate prazo
+    ) {
+        Tarefa tarefa = factory.criar(
+            titulo,
+            descricao,
+            prioridade,
+            prazo
+        );
+    
         return repository.save(tarefa);
     }
+    
 
     public List<Tarefa> listarTarefas() {
         return repository.findAll();

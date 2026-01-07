@@ -19,19 +19,7 @@ public class TarefaController {
         this.service = service;
     }
 
-    @PostMapping
-    public TarefaResponseDTO criarTarefa(@RequestBody TarefaRequestDTO dto) {
-        return new TarefaResponseDTO(
-            service.criarTarefa(
-                dto.getTitulo(),
-                
-                dto.getDescricao(),
-                dto.getPrioridade()
-            )
-        );
-    }
-
-
+    
 
     @GetMapping
     public List<TarefaResponseDTO> listarTarefas() {
@@ -53,7 +41,18 @@ public class TarefaController {
         return new TarefaResponseDTO(service.cancelar(id));
     }
     
-
+    @PostMapping
+    public TarefaResponseDTO criarTarefa(@RequestBody TarefaRequestDTO dto) {
+        return new TarefaResponseDTO(
+            service.criarTarefa(
+                dto.getTitulo(),
+                dto.getDescricao(),
+                dto.getPrioridade(),
+                dto.getPrazo()
+            )
+        );
+    }
+    
     @PutMapping("/{id}/concluir")
     public TarefaResponseDTO concluirTarefa(@PathVariable Long id) {
         return new TarefaResponseDTO(service.concluir(id));

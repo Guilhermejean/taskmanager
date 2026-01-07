@@ -8,6 +8,7 @@ public class PrioridadeBaixaStrategy implements PrioridadeStrategy {
 
     @Override
     public void aplicar(Tarefa tarefa) {
+        System.out.println("🔥 Strategy BAIXA executada");
         tarefa.definirPrazoEmDias(7);
     }
 }

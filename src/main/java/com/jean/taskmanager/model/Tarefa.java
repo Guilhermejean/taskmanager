@@ -64,6 +64,11 @@ public void editar(String titulo, String descricao, Prioridade prioridade) {
         this.prioridade = prioridade;
     }
 }
+public void definirPrazo(LocalDate prazo) {
+    this.prazo = prazo;
+}
+
+
 public void cancelar() {
     if (this.status == StatusTarefa.CONCLUIDA) {
         throw new IllegalStateException("Tarefa já concluída não pode ser cancelada");

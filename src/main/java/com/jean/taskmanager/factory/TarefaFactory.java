@@ -1,5 +1,6 @@
 package com.jean.taskmanager.factory;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
@@ -11,26 +12,36 @@ import com.jean.taskmanager.strategy.PrioridadeStrategy;
 @Component
 public class TarefaFactory {
 
-    private final Map<String, PrioridadeStrategy> strategies;
+    private final Map<Prioridade, PrioridadeStrategy> strategies;
 
-    public TarefaFactory(Map<String, PrioridadeStrategy> strategies) {
+    public TarefaFactory(Map<Prioridade, PrioridadeStrategy> strategies) {
         this.strategies = strategies;
     }
 
     public void debugStrategies() {
         System.out.println("Strategies carregadas: " + strategies.keySet());
     }
-    
-    public Tarefa criar(String titulo, String descricao, Prioridade prioridade) {
+
+    public Tarefa criar(
+        String titulo,
+        String descricao,
+        Prioridade prioridade,
+        LocalDate prazo
+    ) {
+        debugStrategies();
+
         Tarefa tarefa = new Tarefa(titulo, descricao, prioridade);
 
-        PrioridadeStrategy strategy =
-            strategies.getOrDefault(
-                prioridade.name(),
-                strategies.get("PADRAO")
-            );
-
-        tarefa.aplicarPrioridade(strategy);
+        if (prazo != null) {
+            // ✅ usuário definiu prazo manualmente
+            tarefa.definirPrazo(prazo);
+        } else {
+            // ✅ sistema define via Strategy
+            PrioridadeStrategy strategy = strategies.get(prioridade);
+            if (strategy != null) {
+                strategy.aplicar(tarefa);
+            }
+        }
 
         return tarefa;
     }
